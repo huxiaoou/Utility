@@ -35,4 +35,6 @@ Write-Host $sep
 #Start-Process C:\Users\Administrator\Desktop\日报_$trade_date.docx
 #Start-Process \Works\Trade\Reports\output\$trade_year\$trade_date\04_衍生品持仓情况明细表_大宗商品_$trade_date.xlsx
 #Start-Process \Works\Trade\Reports_Merge\output\$trade_year\$trade_date\04_持仓情况明细表_固收托管项目_$trade_date.xlsx
+
+Write-Host $sep
 Pause

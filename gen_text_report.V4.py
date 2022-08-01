@@ -4,7 +4,7 @@ from docx.shared import Pt, Cm
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
 import datetime as dt
 import os
 import sys
@@ -110,6 +110,7 @@ def add_table_from_df(t_doc: Document, t_raw_df: pd.DataFrame, t_table_config: d
             # set alignment
             if j > 0:
                 row_cells[j].paragraphs[0].alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+                row_cells[j].vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             # set width
             if j == 0:
                 row_cells[j].width = Cm(t_table_config[t_raw_df.columns[j]]["width"])
