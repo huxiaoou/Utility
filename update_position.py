@@ -4,7 +4,7 @@ import xlwings as xw
 import xlwings.utils
 
 
-def get_realized_pnl_cumsum(t_report_date, t_config: dict) -> (float, float):
+def get_realized_pnl_cumsum(t_report_date, t_config: dict) -> (float, float, dict):
     nav_df = pd.read_excel(t_config["nav"]["path"], sheet_name="期货净值表", header=0, index_col=0)
     nav_df["trade_date"] = nav_df.index.map(lambda z: z.strftime("%Y%m%d"))
     nav_df = nav_df.set_index("trade_date")
@@ -14,25 +14,24 @@ def get_realized_pnl_cumsum(t_report_date, t_config: dict) -> (float, float):
     nav_df = pd.read_excel(t_config["nav"]["path"], sheet_name="按策略计盈亏", header=[0, 1], index_col=0)
     nav_df["trade_date"] = nav_df.index.map(lambda z: z.strftime("%Y%m%d"))
     nav_df = nav_df.set_index("trade_date")
-    realized_pnl_cumsum_sub = nav_df.at[t_report_date, ("趋势跟踪", "累积实现盈亏")] + \
-                              nav_df.at[t_report_date, ("OU过程", "累积实现盈亏")] + \
-                              nav_df.at[t_report_date, ("期限结构", "累积实现盈亏")] + \
-                              nav_df.at[t_report_date, ("LTRR", "累积实现盈亏")] + \
-                              nav_df.at[t_report_date, ("MTM", "累积实现盈亏")] + \
-                              nav_df.at[t_report_date, ("RS", "累积实现盈亏")]
+
+    strategy_name_list = ["趋势跟踪", "OU过程", "期限结构", "LTRR", "MTM", "RS"]
+    strategy_realized_pnl_cumsum = {z: nav_df.at[t_report_date, (z, "累积实现盈亏")] for z in strategy_name_list}
+    realized_pnl_cumsum_sub = sum(strategy_realized_pnl_cumsum.values())
 
     print("截至{}, 按策略计算，累积实现盈亏:{:.2f}元。".format(t_report_date, realized_pnl_cumsum_sub))
     print("截至{}, 按总体计算，累积实现盈亏:{:.2f}元。".format(t_report_date, realized_pnl_cumsum_all))
-    return realized_pnl_cumsum_all, realized_pnl_cumsum_sub
+    return realized_pnl_cumsum_all, realized_pnl_cumsum_sub, strategy_realized_pnl_cumsum
 
 
-def update_position_and_pnl(t_config: dict, t_pos_type_list: list, t_realized_pnl_cumsum_all: float, t_realized_pnl_cumsum_sub: float):
+def update_position_and_pnl(t_config: dict, t_pos_type_list: list, t_realized_pnl_cumsum_all: float, t_realized_pnl_cumsum_sub: float, t_pnl_by_strategy: dict):
     """
 
     :param t_config:
     :param t_pos_type_list: ["pos_all", "pos_sub"]
     :param t_realized_pnl_cumsum_all:
     :param t_realized_pnl_cumsum_sub:
+    :param t_pnl_by_strategy:
     :return:
     """
 
@@ -98,8 +97,9 @@ def update_position_and_pnl(t_config: dict, t_pos_type_list: list, t_realized_pn
         ws.range("A2:K{0}".format(len(pos_df) + 1)).api.Font.Size = 10
         ws.range("A2:K{0}".format(len(pos_df) + 1)).api.Font.Color = xlwings.utils.rgb_to_int((0, 0, 0))
 
-    # update summary
+    # ================= update summary =================
     ws = wb.sheets["summary"]
+    # ----------------- update total description -----------------
     focus_row_id = 2
     while True:
         conds = (
@@ -113,6 +113,15 @@ def update_position_and_pnl(t_config: dict, t_pos_type_list: list, t_realized_pn
 
     ws.range("F{}".format(focus_row_id)).value = t_realized_pnl_cumsum_sub
     ws.range("F{}".format(focus_row_id + 1)).value = t_realized_pnl_cumsum_all
+
+    # ----------------- update strategy realized pnl -----------------
+    focus_row_id = 2
+    strategy_name = ""
+    while strategy_name != "总计":
+        strategy_name = ws.range("A{}".format(focus_row_id)).value
+        if strategy_name in t_pnl_by_strategy:
+            ws.range("F{}".format(focus_row_id)).value = t_pnl_by_strategy[strategy_name]
+        focus_row_id += 1
 
     # save and close
     wb.save()
@@ -134,11 +143,12 @@ config = {
     "nav": {"path": "\Works\Trade\Reports\intermediary\组合净值.xlsx"},
 }
 
-pnl_all, pnl_sub = get_realized_pnl_cumsum(t_report_date=report_date, t_config=config)
+pnl_all, pnl_sub, pnl_by_strategy = get_realized_pnl_cumsum(t_report_date=report_date, t_config=config)
 
 update_position_and_pnl(
     t_config=config,
     t_pos_type_list=["pos_all", "pos_sub"],
     t_realized_pnl_cumsum_all=pnl_all,
-    t_realized_pnl_cumsum_sub=pnl_sub
+    t_realized_pnl_cumsum_sub=pnl_sub,
+    t_pnl_by_strategy=pnl_by_strategy,
 )
