@@ -181,7 +181,7 @@ paragraph_count += 1
 report.paragraphs[paragraph_count].paragraph_format.first_line_indent = Pt(norm_font_size * 2)
 add_table_from_df(t_doc=report, t_raw_df=commodity_pos_df, t_table_config=table_config, t_header_bg_color=table_header_bg_color)
 
-report.add_page_break()
+# report.add_page_break()
 
 # --- EQUITY
 equity_desc_text, equity_pos_df = get_equity_desc_text(t_report_date=report_date, t_report_dir=equity_src_dir)
