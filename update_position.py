@@ -92,10 +92,15 @@ def update_position_and_pnl(t_config: dict, t_pos_type_list: list, t_realized_pn
             ws.range("K{}".format(focus_row_id)).value = "=sum(K2:K{})".format(len(pos_df) + 1)
 
         # format adjustment
-        ws.range("A2:K{0}".format(len(pos_df) + 1)).row_height = 12
-        ws.range("A2:K{0}".format(len(pos_df) + 1)).color = (255, 255, 255)
-        ws.range("A2:K{0}".format(len(pos_df) + 1)).api.Font.Size = 10
-        ws.range("A2:K{0}".format(len(pos_df) + 1)).api.Font.Color = xlwings.utils.rgb_to_int((0, 0, 0))
+        end_column_id = "A"
+        if pos_type == "pos_all":
+            end_column_id = "I"
+        if pos_type == "pos_sub":
+            end_column_id = "K"
+        ws.range("A2:{}{}".format(end_column_id, len(pos_df) + 1)).row_height = 12
+        ws.range("A2:{}{}".format(end_column_id, len(pos_df) + 1)).color = (255, 255, 255)
+        ws.range("A2:{}{}".format(end_column_id, len(pos_df) + 1)).api.Font.Size = 10
+        ws.range("A2:{}{}".format(end_column_id, len(pos_df) + 1)).api.Font.Color = xlwings.utils.rgb_to_int((0, 0, 0))
 
     # ================= update summary =================
     ws = wb.sheets["summary"]

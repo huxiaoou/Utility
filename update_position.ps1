@@ -8,6 +8,7 @@ Set-Location \Works\Monitor\
 python \Works\Monitor\convert_04_format.py $d
 Set-Location \Works\Trade\Utility
 python \Works\Trade\Utility\update_position.py $d
+Pause
 
 #$y = $d.substring(0, 4)
 #Start-Process excel \Works\Monitor\monitor.V3.xlsx
