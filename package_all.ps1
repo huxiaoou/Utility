@@ -14,12 +14,12 @@ python gen_text_report.V4.py $trade_date
 # for Qiuyue
 Write-Host $sep
 7z a C:\Users\Administrator\Desktop\$trade_date-²ÆÎñ-Çñ«h \Works\Trade\Reports\output\$trade_year\$trade_date\08*
-7z a C:\Users\Administrator\Desktop\$trade_date-²ÆÎñ-Çñ«h \Works\Trade\Reports_Equity2\output\$trade_year\$trade_date\07*
+# 7z a C:\Users\Administrator\Desktop\$trade_date-²ÆÎñ-Çñ«h \Works\Trade\Reports_Equity2\output\$trade_year\$trade_date\07*
 
 # for Qianyelan
 Write-Host $sep
 7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports\output\$trade_year\$trade_date\06*
-7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports_Merge\output\$trade_year\$trade_date\04*
+# 7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports_Merge\output\$trade_year\$trade_date\04*
 
 # for Fanyabin
 Write-Host $sep
