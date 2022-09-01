@@ -183,14 +183,14 @@ add_table_from_df(t_doc=report, t_raw_df=commodity_pos_df, t_table_config=table_
 
 # report.add_page_break()
 
-# --- EQUITY
-equity_desc_text, equity_pos_df = get_equity_desc_text(t_report_date=report_date, t_report_dir=equity_src_dir)
-change_run_fonts(report.add_paragraph().add_run("5、协作类："), "Fangsong", norm_font_size, "仿宋")
-paragraph_count += 1
-change_run_fonts(report.add_paragraph().add_run(equity_desc_text), "Fangsong", norm_font_size, "仿宋")
-paragraph_count += 1
-report.paragraphs[paragraph_count].paragraph_format.first_line_indent = Pt(norm_font_size * 2)
-add_table_from_df(t_doc=report, t_raw_df=equity_pos_df, t_table_config=table_config, t_header_bg_color=table_header_bg_color)
+# # --- EQUITY
+# equity_desc_text, equity_pos_df = get_equity_desc_text(t_report_date=report_date, t_report_dir=equity_src_dir)
+# change_run_fonts(report.add_paragraph().add_run("5、协作类："), "Fangsong", norm_font_size, "仿宋")
+# paragraph_count += 1
+# change_run_fonts(report.add_paragraph().add_run(equity_desc_text), "Fangsong", norm_font_size, "仿宋")
+# paragraph_count += 1
+# report.paragraphs[paragraph_count].paragraph_format.first_line_indent = Pt(norm_font_size * 2)
+# add_table_from_df(t_doc=report, t_raw_df=equity_pos_df, t_table_config=table_config, t_header_bg_color=table_header_bg_color)
 
 # --- SAVE
 report_file = "日报_{}.docx".format(report_date)
