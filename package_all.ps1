@@ -18,8 +18,9 @@ Write-Host $sep
 
 # for Qianyelan
 Write-Host $sep
-7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports\output\$trade_year\$trade_date\06*
+# 7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports\output\$trade_year\$trade_date\06*
 # 7z a C:\Users\Administrator\Desktop\$trade_date-Ç®Ò¶À¼ \Works\Trade\Reports_Merge\output\$trade_year\$trade_date\04*
+Copy-Item \Works\Trade\Reports\output\$trade_year\$trade_date\06* C:\Users\Administrator\Desktop\
 
 # for Fanyabin
 Write-Host $sep
